@@ -4,7 +4,6 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 public class BfSearcher extends Searcher {
-
     public BfSearcher(
         BufferedImage image,
         Set<Point> visited,
@@ -40,5 +39,4 @@ public class BfSearcher extends Searcher {
     protected Color nextColor() {
         return colorProvider.poll();
     }
-    
 }

@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.Deque;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -57,7 +56,6 @@ public abstract class Searcher {
     }
 
     /* abstract stuff */
-
     public abstract boolean isDone();
     public abstract void seed(Point[] points);
     protected abstract Point nextPoint();
