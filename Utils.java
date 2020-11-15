@@ -28,9 +28,9 @@ public class Utils {
 
     public static double distanceFromColor(Color color, Color target) {
         double dist = Math.sqrt(
-            Math.pow(target.getRed(), color.getRed())
-            + Math.pow(target.getGreen(), color.getGreen())
-            + Math.pow(target.getBlue(), color.getBlue())
+            Math.pow(target.getRed() - color.getRed(), 2)
+            + Math.pow(target.getGreen() - color.getGreen(), 2)
+            + Math.pow(target.getBlue() - color.getBlue(), 2)
         );
         return dist;
     }
