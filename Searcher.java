@@ -33,10 +33,10 @@ public abstract class Searcher {
         if (isDone() == false) {
             Point point = nextPoint();
             if (visited.contains(point) == false) {
-                image.setRGB(point.getX(), point.getY(), nextColor().getRGB());
                 visited.add(point);
-                expandFrontier(point);
+                image.setRGB(point.getX(), point.getY(), nextColor().getRGB());
                 pixelSet = true;
+                expandFrontier(point);
             }
         }
         return pixelSet;
