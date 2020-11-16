@@ -1,19 +1,5 @@
 public class Point {
 
-    /* static stuff */
-
-    public static Point add(Point a, Point b) {
-        return new Point(a.x + b.x, a.y + b.y);
-    }
-
-    public static Point scale(Point a, Point b) {
-        return new Point(a.x * b.x, a.y * b.y);
-    }
-
-    public static Point scale(Point point, int scalar) {
-        return new Point(point.x * scalar, point.y * scalar);
-    }
-
     /* instance stuff */
 
     private int x;
@@ -87,6 +73,25 @@ public class Point {
         return (x == other.getX() && y == other.getY());
     }
 
+    /* static stuff */
+    public static Point add(Point a, Point b) {
+        return new Point(a.x + b.x, a.y + b.y);
+    }
+    
+    public static Point scale(Point a, Point b) {
+        return new Point(a.x * b.x, a.y * b.y);
+    }
+    
+    public static Point scale(Point point, int scalar) {
+        return new Point(point.x * scalar, point.y * scalar);
+    }
+
+    public static double distance(Point a, Point b) {
+        return Math.sqrt(
+            Math.pow((a.x - b.x), 2)
+            + Math.pow((a.y - b.y), 2)
+        );
+    }
     public static void main(String[] args) {
         
     }
