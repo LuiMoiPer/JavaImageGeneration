@@ -1,10 +1,56 @@
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
 /**
- * Used to help generate neighbors
+ * Used to help build a set of neighbors for search algorithims
  */
-public class NeighborGenerator {
+public class NeighborBuilder {
     /* instance stuff */
+
+    private Set<Point> neighbors = new HashSet<>();
+
+    public NeighborBuilder() {}
+
+    public NeighborBuilder(Point[] points) {
+        neighbors.addAll(Arrays.asList(points));
+    }
+    
+    public boolean add(Point point) {
+        return neighbors.add(point);
+    }
+
+    public boolean addall(Point[] points) {
+        return this.addAll(Arrays.asList(points));
+    }
+
+    public boolean addAll(Collection<Point> points) {
+        return neighbors.addAll(points);
+    }
+
+    public void scale(int x, int y) {
+        this.scale(new Point(x, y));
+    }
+
+    public void scale(Point scaleAmount) {
+        for (Point point : neighbors) {
+            point.scale(point);
+        }
+    }
+
+    public void shift(int x, int y) {
+        this.shift(new Point(x, y));
+    }
+
+    public void shift(Point shiftAmount) {
+        for (Point point : neighbors) {
+            point.add(shiftAmount);
+        }
+    }
+
     /* static stuff */
     public static Point[] carinal() {
         return new Point[] {
