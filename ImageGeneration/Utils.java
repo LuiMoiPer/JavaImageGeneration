@@ -1,3 +1,5 @@
+package ImageGeneration;
+
 import java.awt.Color;
 import java.lang.Math;
 import java.text.SimpleDateFormat;

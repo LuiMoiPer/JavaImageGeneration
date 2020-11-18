@@ -1,3 +1,5 @@
+package ImageGeneration;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,7 +10,7 @@ import java.util.PriorityQueue;
 import javax.imageio.ImageIO;
 
 public class App {
-    private static String inputPath = "./Inputs/1.jpg";
+    private static String inputPath = "./Inputs/3.jpg";
     private static String outputPath = "./Outputs/";
     private static BufferedImage image;
 
@@ -25,25 +27,28 @@ public class App {
         int height = image.getHeight();
         frontier.add(Utils.randomPoint(width, height));
         // set up heaps
-        PriorityQueue<Color> heap = new PriorityQueue<>(16, new ColorByDistance(Color.ORANGE));
+        PriorityQueue<Color> heap = new PriorityQueue<>(16, new ColorByDistance(Utils.randomColor()));
         fillHeap(image, heap);
         // set up neighbors
         Point[] neighbors = new Point[]{
-            new Point(-1, 0),
+            new Point(-1, -1),
             new Point(1, 0),
-            new Point(0, -1),
-            new Point(0, 1)
+            new Point(-1, 0),
+            new Point(1, 1)
         };
+        Utils.shuffleArray(neighbors);
         // set up and run bfs
-        BfSearcher bfs = new BfSearcher(image, 
+        AlternatingSearcher as = new AlternatingSearcher(image, 
             new HashSet<>(), 
             frontier,
             heap,
             neighbors,
-            true
+            true,
+            1,
+            3
         );
-        while (bfs.isDone() == false) {
-            bfs.step();
+        while (as.isDone() == false) {
+            as.step();
         }
     }
 

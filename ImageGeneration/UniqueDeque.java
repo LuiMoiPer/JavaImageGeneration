@@ -1,3 +1,5 @@
+package ImageGeneration;
+
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;

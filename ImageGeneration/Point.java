@@ -1,3 +1,5 @@
+package ImageGeneration;
+
 public class Point {
 
     /* instance stuff */

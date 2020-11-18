@@ -1,3 +1,5 @@
+package ImageGeneration;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,7 +12,6 @@ import java.util.Set;
  */
 public class NeighborBuilder {
     /* instance stuff */
-
     private Set<Point> neighbors = new HashSet<>();
 
     public NeighborBuilder() {}
