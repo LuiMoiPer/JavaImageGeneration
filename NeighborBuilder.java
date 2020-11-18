@@ -31,6 +31,10 @@ public class NeighborBuilder {
         return neighbors.addAll(points);
     }
 
+    public Point[] getPoints() {
+        return neighbors.toArray(new Point[0]);
+    }
+
     public void scale(int x, int y) {
         this.scale(new Point(x, y));
     }
