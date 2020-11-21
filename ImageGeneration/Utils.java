@@ -1,6 +1,8 @@
 package ImageGeneration;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.lang.Math;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,5 +55,12 @@ public class Utils {
     public static Point randomPoint(int x, int y) {
         Random random = ThreadLocalRandom.current();
         return new Point(random.nextInt(x), random.nextInt(y));
+    }
+
+    public static Font randomFont() {
+        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        Font[] fonts = env.getAllFonts();
+        Random random = ThreadLocalRandom.current();
+        return fonts[random.nextInt(fonts.length)];
     }
 }
