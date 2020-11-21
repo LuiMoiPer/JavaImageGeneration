@@ -50,6 +50,23 @@ public class AlternatingSearcher extends Searcher {
     }
 
     @Override
+    protected Point nextPoint() {
+        Point point;
+        if (bfs) {
+            point = frontier.pollFirst();
+        }
+        else {
+            point = frontier.pollLast();
+        }        
+        return point;
+    }
+
+    @Override
+    protected Color nextColor() {
+        return colorProvider.poll();
+    }
+
+    @Override
     public void seed(Point[] points) {
         for (Point point : points) {
             frontier.addFirst(point);
@@ -57,30 +74,19 @@ public class AlternatingSearcher extends Searcher {
     }
 
     @Override
-    protected Point nextPoint() {
-        // do the step
-        Point point;
-        if (bfs) {
-            point = frontier.pollFirst();
-        }
-        else {
-            point = frontier.pollLast();
-        }
-        // update control mechanism
-        if (--stepsTillSwitch == 0) {
+    public boolean step() {
+        boolean pixelSet = super.step();
+        // update control mechanism if we assigned a pixel
+        if (pixelSet && --stepsTillSwitch == 0) {
             if (bfs == true) {
                 stepsTillSwitch = dfsSteps;
+                bfs = false;
             }
             else {
                 stepsTillSwitch = bfsSteps;
+                bfs = true;
             }
-            bfs = !bfs;
         }
-        return point;
+        return pixelSet;
     }
-
-    @Override
-    protected Color nextColor() {
-        return colorProvider.poll();
-    }   
 }
