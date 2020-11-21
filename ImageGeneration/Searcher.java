@@ -1,7 +1,10 @@
 package ImageGeneration;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -55,6 +58,46 @@ public abstract class Searcher {
                 frontier.addLast(newPoint);                
             }
         }
+    }
+
+    //  seedText(Utils.randomFont(), "Boop", true, true)
+    public void seedText(Font font, String text, boolean addFirst, boolean shufflePoints) {
+        // make new image and graphics
+        BufferedImage mask = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics = mask.createGraphics();
+        // draw text
+        font = new Font(font.getName(), Font.PLAIN, 600);
+        graphics.setFont(font);
+        graphics.setPaint(Color.WHITE);
+        graphics.drawString(text, mask.getWidth() / 3, (mask.getHeight() / 3) * 2);
+        App.saveImage(mask, "./Outputs/", 0);
+        // read the pixels like a mask
+        if (addFirst) {
+            for (Point point : getPointsFromMask(mask, shufflePoints)) {
+                frontier.addFirst(point);
+            }
+        }
+        else {
+            for (Point point : getPointsFromMask(mask, shufflePoints)) {
+                frontier.addLast(point);
+            }
+        }
+    }
+
+    public Point[] getPointsFromMask(BufferedImage mask, boolean shufflePoints) {
+        Set<Point> visiblePoints = new HashSet<>();
+        for (int x = 0; x < mask.getWidth(); x++) {
+            for (int y = 0; y < mask.getHeight(); y++) {
+                if (mask.getRGB(x, y) == Color.WHITE.getRGB()) {
+                    visiblePoints.add(new Point(x, y));
+                }
+            }
+        }
+        Point[] points = visiblePoints.toArray(new Point[0]);
+        if (shufflePoints) {
+            Utils.shuffleArray(points);
+        }
+        return points;
     }
 
     /* abstract stuff */
