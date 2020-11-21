@@ -36,6 +36,16 @@ public class NeighborBuilder {
         return neighbors.toArray(new Point[0]);
     }
 
+    public Point[] getShuffledPoints() {
+        Point[] points = getPoints();
+        Utils.shuffleArray(points);
+        return points;
+    }
+
+    public int size() {
+        return neighbors.size();
+    }
+
     public void scale(int x, int y) {
         this.scale(new Point(x, y));
     }
