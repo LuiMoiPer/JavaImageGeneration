@@ -9,12 +9,18 @@ import java.util.PriorityQueue;
 
 import javax.imageio.ImageIO;
 
+import twitter4j.Status;
+
 public class App {
-    private static String inputPath = "./Inputs/3.jpg";
+    private static String inputPath = "./Inputs/4.jpg";
     private static String outputPath = "./Outputs/";
     private static BufferedImage image;
 
     public static void main(String[] args) {
+        // get a tweet with an image from twitter
+        // download the image
+        // run image generation on the image
+        // upload the image generated
         loadImage(inputPath);
         bfs(image);
         saveImage(image, outputPath, 0);
@@ -23,19 +29,11 @@ public class App {
     static void bfs(BufferedImage image) {
         // set up frontier
         UniqueDeque<Point> frontier = new UniqueDeque<>();
-        int width = image.getWidth();
-        int height = image.getHeight();
-        frontier.add(Utils.randomPoint(width, height));
         // set up heaps
         PriorityQueue<Color> heap = new PriorityQueue<>(16, new ColorByDistance(Utils.randomColor()));
         fillHeap(image, heap);
         // set up neighbors
-        Point[] neighbors = new Point[]{
-            new Point(-1, -1),
-            new Point(1, 0),
-            new Point(-1, 0),
-            new Point(1, 1)
-        };
+        Point[] neighbors = NeighborBuilder.knight();
         Utils.shuffleArray(neighbors);
         // set up and run bfs
         AlternatingSearcher as = new AlternatingSearcher(image, 
@@ -44,9 +42,10 @@ public class App {
             heap,
             neighbors,
             true,
-            1,
+            5,
             3
         );
+        as.seedText(Utils.randomFont(), "#", true, true);
         while (as.isDone() == false) {
             as.step();
         }
@@ -80,5 +79,21 @@ public class App {
                 heap.add(color);
             }
         }
+    }
+
+    static Status findTweetWithImage() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    static BufferedImage getImageFromTweet() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    static BufferedImage randomImageTransformation() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    static void postNewImageToTwitter() {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
