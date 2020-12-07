@@ -3,7 +3,11 @@ package ImageGeneration;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
 
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
@@ -11,13 +15,14 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
-import twitter4j.examples.tweets.UpdateStatus;
 
 public class TwitterDriver {
     private static String consumerKeyPath = "./Candy/ApiKey";
     private static String consumerKeySecretPath = "./Candy/ApiSecretKey";
     private static String accessTokenPath = "./Candy/AccessToken";
     private static String accessTokenSecretPath = "./Candy/AccessTokenSecret";
+    private static String tempPath = "./temp";
+    private static int MAX_UPLOAD_SIZE;
     private static Twitter twitter;
     static {
         setupTwitterInstance();
@@ -68,9 +73,31 @@ public class TwitterDriver {
     }
 
     public static File getUploadableImage(BufferedImage image) {
-        // check image size
-        // if more than 5M then switch to png is possible
-        throw new UnsupportedOperationException("Not implemented yet");
+        // save image as both png and jpg
+        File output = null;
+        File png = new File(tempPath + ".png");
+        File jpg = new File(tempPath + ".jpg");
+        try {
+            ImageIO.write(image, "png", png);
+            ImageIO.write(image, "jpg", jpg);
+            // if the png is less than max upload return that
+            if (Files.size(png.toPath()) > MAX_UPLOAD_SIZE) {
+                output = png;
+            }
+            // else if jpg is less than max upload return that
+            else if (Files.size(jpg.toPath()) > MAX_UPLOAD_SIZE) {
+                output = jpg;
+            }
+            // else resize
+            else {
+                throw new UnsupportedOperationException("Resize not yet implemented");
+            }
+        } 
+        catch (IOException exception) {
+            System.out.println("=== IO Exception ===");
+            System.out.println(exception.getMessage());
+        }
+        return output;
     }
 
     public static Status getStatusWithImage() {
