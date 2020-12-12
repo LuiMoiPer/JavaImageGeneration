@@ -5,11 +5,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-import twitter4j.HttpParameter;
 import twitter4j.MediaEntity;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
@@ -61,6 +62,22 @@ public class TwitterDriver {
             System.out.println("File not found: " + path);
         }
         return contents;
+    }
+
+    private static List<Status> getStatusesFromIds(long[] ids) {
+        List<Status> statuses = new LinkedList<>();
+        for (long id : ids) {
+            try {
+                // make the status and add it to statuses
+                Status status = twitter.showStatus(id);
+                statuses.add(status);
+            }
+            catch (TwitterException exception) {
+                System.out.println("=== Twitter Exception ===");
+                exception.printStackTrace();
+            }
+        }
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     private static File resizeImage(BufferedImage image) {
@@ -126,30 +143,6 @@ public class TwitterDriver {
     }
 
     public static Status getStatusWithImage() {
-        // search twitter for a status that also has an image
-        Query query = new Query("art");
-        query.setCount(20);
-        query.setResultType(Query.POPULAR);
-        System.out.println(query.getQuery());
-        QueryResult result = null;
-        try {
-            result = twitter.search(query);
-        }
-        catch (TwitterException exception) {
-            System.out.println("=== Twitter Exception ===");
-            System.out.println(exception.getMessage());
-            exception.printStackTrace();
-        }
-        for (Status status : result.getTweets()) {
-            System.out.println(status.getText());
-            System.out.println(status.getId());
-            MediaEntity[] mediaEntities = status.getMediaEntities();
-            for (MediaEntity mediaEntity : mediaEntities) {
-                System.out.println("Media of type: " + mediaEntity.getType());
-            }
-            //System.out.print("+");
-        }
-
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
