@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -14,6 +15,7 @@ import javax.imageio.ImageIO;
 import twitter4j.MediaEntity;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
+import twitter4j.Trend;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -64,12 +66,32 @@ public class TwitterDriver {
         return contents;
     }
 
+    private static String getRandomTrendName() {
+        String trendName = null;
+        try {
+            Trend[] trends = twitter.trends().getPlaceTrends(1).getTrends();
+            Random random = new Random();
+            Trend trend = trends[random.nextInt(trends.length)];
+            trendName = trend.getName();
+        }
+        catch (TwitterException exception) {
+            exception.printStackTrace();
+        }
+        System.out.println(trendName);
+        return trendName;
+    }
+
     private static List<Status> getStatusesFromIds(long[] ids) {
         List<Status> statuses = new LinkedList<>();
         for (long id : ids) {
             try {
                 // make the status and add it to statuses
                 Status status = twitter.showStatus(id);
+                MediaEntity[] mediaEntities = status.getMediaEntities();
+                for (MediaEntity mediaEntity : mediaEntities) {
+                    System.out.println(mediaEntity.getType());
+                    System.out.println(mediaEntity.getMediaURL());
+                }
                 statuses.add(status);
             }
             catch (TwitterException exception) {
@@ -143,6 +165,15 @@ public class TwitterDriver {
     }
 
     public static Status getStatusWithImage() {
+        String searchTerm = getRandomTrendName();
+        try {
+            List<Status> statuses = getStatusesFromIds(
+                TwitterApi2.getIdsOfStatusesWithImage(searchTerm)
+            );
+        }
+        catch (TwitterException exception) {
+            exception.printStackTrace();
+        }
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
