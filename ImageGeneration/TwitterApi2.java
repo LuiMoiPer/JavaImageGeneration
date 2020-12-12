@@ -13,6 +13,7 @@ import java.util.Scanner;
 
 import twitter4j.JSONArray;
 import twitter4j.JSONObject;
+import twitter4j.TwitterException;
 
 public class TwitterApi2 {
     private static String bearerTokenPath = "./Candy/BearerToken";
@@ -55,24 +56,24 @@ public class TwitterApi2 {
         return ids;
     }
 
-    public static long[] getIdsOfStatusesWithImage(String searchTerm) throws Exception {
-        searchTerm = URLEncoder.encode(searchTerm, "UTF-8");
-        String queryString = "?query=" + searchTerm + "%20has:images%20-is:retweet";
-        HttpClient client = HttpClient.newHttpClient();
-
-        System.out.println(HOST + RECENT_ENDPOINT + queryString);
-
-        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder();
-        requestBuilder.uri(URI.create(HOST + RECENT_ENDPOINT + queryString)).header(AUTH_HEADER,
-                "Bearer " + BEARER_TOKEN);
-
+    public static long[] getIdsOfStatusesWithImage(String searchTerm) throws TwitterException {
         try {
+            searchTerm = URLEncoder.encode(searchTerm, "UTF-8");
+            String queryString = "?query=" + searchTerm + "%20has:images%20-is:retweet";
+            HttpClient client = HttpClient.newHttpClient();
+
+            System.out.println(HOST + RECENT_ENDPOINT + queryString);
+
+            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder();
+            requestBuilder.uri(URI.create(HOST + RECENT_ENDPOINT + queryString)).header(AUTH_HEADER,
+                    "Bearer " + BEARER_TOKEN);
+
             HttpResponse<String> response = client.send(requestBuilder.build(), BodyHandlers.ofString());
             if (response.statusCode() < 300) {
                 return getIdsFromJson(response.body());
             }
             else {
-                throw new Exception("Error on call to twitter api");
+                throw new TwitterException("Error on call to twitter api");
             }
         } 
         catch (IOException | InterruptedException exception) {
