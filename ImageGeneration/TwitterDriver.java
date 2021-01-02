@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +49,8 @@ public class TwitterDriver {
         }
     }
 
-    private TwitterDriver() {}
+    private TwitterDriver() {
+    }
 
     private static void cleanupTempFiles() {
         tempImg.delete();
@@ -64,6 +67,21 @@ public class TwitterDriver {
             System.out.println("File not found: " + path);
         }
         return contents;
+    }
+
+    private static ImageAndStatus getImageAndStatusFromList(List<Status> statuses) throws MalformedURLException {
+        ImageAndStatus imageAndStatus = null;
+        for (Status status : statuses) {
+            MediaEntity[] mediaEntities = status.getMediaEntities();
+            if (mediaEntities.length > 0 
+                && mediaEntities[0].getType().equals("photo")
+            ) {
+                URL url = new URL(mediaEntities[0].getMediaURL());
+                imageAndStatus = new ImageAndStatus(url, status);
+                break;
+            }
+        }
+        return imageAndStatus;
     }
 
     private static String getRandomTrendName() {
@@ -99,7 +117,7 @@ public class TwitterDriver {
                 exception.printStackTrace();
             }
         }
-        throw new UnsupportedOperationException("Not implemented yet");
+        return statuses;
     }
 
     private static File resizeImage(BufferedImage image) {
@@ -164,17 +182,22 @@ public class TwitterDriver {
         return output;
     }
 
-    public static Status getStatusWithImage() {
+    public static ImageAndStatus getTrendingImageAndStatus() {
         String searchTerm = getRandomTrendName();
+        ImageAndStatus imageAndStatus = null;
         try {
             List<Status> statuses = getStatusesFromIds(
                 TwitterApi2.getIdsOfStatusesWithImage(searchTerm)
             );
+            imageAndStatus = getImageAndStatusFromList(statuses);
         }
         catch (TwitterException exception) {
             exception.printStackTrace();
         }
-        throw new UnsupportedOperationException("Not implemented yet");
+        catch (MalformedURLException exception) {
+            exception.printStackTrace();
+        }
+        return imageAndStatus;
     }
 
     public static void postImage(BufferedImage image, Status originalStatus) {
