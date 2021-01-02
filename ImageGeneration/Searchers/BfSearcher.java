@@ -1,9 +1,12 @@
-package ImageGeneration;
+package ImageGeneration.Searchers;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.PriorityQueue;
 import java.util.Set;
+
+import ImageGeneration.Point;
+import ImageGeneration.UniqueDeque;
 
 public class BfSearcher extends Searcher {
     public BfSearcher(

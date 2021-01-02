@@ -1,4 +1,4 @@
-package ImageGeneration;
+package ImageGeneration.Searchers;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -8,6 +8,11 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import ImageGeneration.App;
+import ImageGeneration.Point;
+import ImageGeneration.UniqueDeque;
+import ImageGeneration.Utils;
+
 public abstract class Searcher {
     private BufferedImage image;
     private Set<Point> visited;
@@ -15,6 +20,15 @@ public abstract class Searcher {
     private boolean shuffleNeighbors;
     protected PriorityQueue<Color> colorProvider;
     protected UniqueDeque<Point> frontier;
+
+    public Searcher() {
+        this.image = null;
+        this.visited = null;
+        this.frontier = null;
+        this.colorProvider = null;
+        this.neighbors = null;
+        this.shuffleNeighbors = true;
+    }
 
     public Searcher(
         BufferedImage image,
@@ -60,17 +74,16 @@ public abstract class Searcher {
         }
     }
 
-    //  seedText(Utils.randomFont(), "Boop", true, true)
     public void seedText(Font font, String text, boolean addFirst, boolean shufflePoints) {
         // make new image and graphics
         BufferedImage mask = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = mask.createGraphics();
         // draw text
-        font = new Font(font.getName(), Font.PLAIN, 600);
+        font = new Font(font.getName(), Font.PLAIN, 300);
         graphics.setFont(font);
         graphics.setPaint(Color.WHITE);
         graphics.drawString(text, mask.getWidth() / 3, (mask.getHeight() / 3) * 2);
-        App.saveImage(mask, "./Outputs/", 0);
+        Utils.saveImage(mask, "./Outputs/", 0);
         // read the pixels like a mask
         if (addFirst) {
             for (Point point : getPointsFromMask(mask, shufflePoints)) {
