@@ -74,6 +74,10 @@ public abstract class Searcher {
         }
     }
 
+    public void seed(Point point) {
+        frontier.addFirst(point);
+    }
+
     public void seedText(Font font, String text, boolean addFirst, boolean shufflePoints) {
         // make new image and graphics
         BufferedImage mask = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
