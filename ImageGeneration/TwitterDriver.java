@@ -32,8 +32,8 @@ public class TwitterDriver {
     private static String accessTokenSecretPath = "./Candy/AccessTokenSecret";
     private static Twitter twitter;
 
-    private final static String TEMP_PATH = "./temp";
-    private final static String RESIZE_PATH = "./tempResize";
+    private final static String TEMP_PATH = "./Temp/temp";
+    private final static String RESIZE_PATH = "./Temp/tempResize";
     private static File tempImg = new File(TEMP_PATH + ".png");
     private static File tempResizedImg = new File(RESIZE_PATH + ".png");
     private static long MAX_UPLOAD_SIZE = 5242880;
