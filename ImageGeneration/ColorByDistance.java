@@ -10,6 +10,10 @@ public class ColorByDistance implements Comparator<Color> {
         this.color = color;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     @Override
     public int compare(Color a, Color b) {
         double aDistance = Utils.distanceFromColor(color, a);
