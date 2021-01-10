@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.lang.Math;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -56,6 +58,14 @@ public class Utils {
 
     public static PriorityQueue<Color> randomHeap() {
         return new PriorityQueue<>(16, new ColorByDistance(randomColor()));
+    }
+
+    public static List<PriorityQueue<Color>> getEmptyColorProviders(int count) {
+        List<PriorityQueue<Color>> colorProviders = new LinkedList<PriorityQueue<Color>>();
+        for (int i = 0; i < count; i++) {
+            colorProviders.add(randomHeap());
+        }
+        return colorProviders;
     }
 
     public static Point randomPoint(int x, int y) {
