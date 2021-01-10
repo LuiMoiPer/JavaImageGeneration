@@ -18,6 +18,11 @@ public class SearcherFactory {
         DEPTH_FIRST
     }
 
+    private static int DEFAULT_MIN_BFS_STEPS = 2;
+    private static int DEFAULT_MAX_BFS_STEPS = 10;
+    private static int DEFAULT_MIN_DFS_STEPS = 2;
+    private static int DEFAULT_MAX_DFS_STEPS = 10;
+
     private BufferedImage image;
     private Set<Point> visited;
     private List<PriorityQueue<Color>> colorProviders;
@@ -44,6 +49,29 @@ public class SearcherFactory {
         this.colorProviders = colorProviders;
         this.possibleNeighbors = possibleNeighbors;
         this.shuffleNeighbors = shuffleNeighbors;
+    }
+
+    public Searcher makeSearcher(Type type) {
+        switch (type) {
+            case ALTERNATING:
+                return makeAlternatingSearcher();
+            
+            case BREADTH_FIRST:
+                return makeBfSearcher();
+
+            case DEPTH_FIRST:
+                return makeDfSearcher();
+
+            default:
+                throw new UnsupportedOperationException("Unsupported searcher type");
+        }
+    }
+
+    public AlternatingSearcher makeAlternatingSearcher() {
+        Random random = new Random();
+        int bfsSteps = random.nextInt((DEFAULT_MAX_BFS_STEPS - DEFAULT_MIN_BFS_STEPS)) + DEFAULT_MIN_BFS_STEPS;
+        int dfsSteps = random.nextInt((DEFAULT_MAX_DFS_STEPS - DEFAULT_MIN_DFS_STEPS)) + DEFAULT_MIN_DFS_STEPS;
+        return makeAlternatingSearcher(bfsSteps, dfsSteps);
     }
 
     public AlternatingSearcher makeAlternatingSearcher(int alternationPeriod) {
