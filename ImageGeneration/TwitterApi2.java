@@ -44,14 +44,12 @@ public class TwitterApi2 {
     }
 
     private static long[] getIdsFromJson(String json) {
-        System.out.println("\n\n" + json + "\n\n");
         JSONObject response = new JSONObject(json);
         JSONArray dataEntries = response.getJSONArray("data");
         long[] ids = new long[dataEntries.length()];
         for (int i = 0; i < dataEntries.length(); i++) {
             JSONObject status = dataEntries.getJSONObject(i);
             ids[i] = status.getLong("id");
-            System.out.println(ids[i]);
         }
         return ids;
     }
@@ -61,8 +59,6 @@ public class TwitterApi2 {
             searchTerm = URLEncoder.encode(searchTerm, "UTF-8");
             String queryString = "?query=" + searchTerm + "%20has:images%20-is:retweet";
             HttpClient client = HttpClient.newHttpClient();
-
-            System.out.println(HOST + RECENT_ENDPOINT + queryString);
 
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder();
             requestBuilder.uri(URI.create(HOST + RECENT_ENDPOINT + queryString)).header(AUTH_HEADER,
