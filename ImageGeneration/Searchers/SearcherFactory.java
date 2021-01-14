@@ -51,6 +51,12 @@ public class SearcherFactory {
         this.shuffleNeighbors = shuffleNeighbors;
     }
 
+    public Searcher makeRandomSearcher() {
+        Random random = new Random();
+        Type type = Type.values()[random.nextInt(Type.values().length)];
+        return makeSearcher(type);
+    }
+
     public Searcher makeSearcher(Type type) {
         switch (type) {
             case ALTERNATING:
