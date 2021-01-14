@@ -24,7 +24,7 @@ public class NeighborBuilder {
         return neighbors.add(point);
     }
 
-    public boolean addall(Point[] points) {
+    public boolean addAll(Point[] points) {
         return this.addAll(Arrays.asList(points));
     }
 
@@ -56,7 +56,7 @@ public class NeighborBuilder {
         }
     }
 
-    public void shift(int x, int y) {
+    public void  shift(int x, int y) {
         this.shift(new Point(x, y));
     }
 
@@ -123,6 +123,20 @@ public class NeighborBuilder {
                     points.add(new Point(-x, -y));
                 }
             }
+        }
+        return points.toArray(new Point[0]);
+    }
+
+    public static Point[] scale(Point[] points, int scaleAmount) {
+        for (Point point : points) {
+            point.scale(scaleAmount);
+        }
+        return points;
+    }
+
+    public static Point[] scale(Collection<Point> points, int scaleAmount) {
+        for (Point point : points) {
+            point.scale(scaleAmount);
         }
         return points.toArray(new Point[0]);
     }
