@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -13,54 +11,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
 
-import ImageGeneration.Searchers.AlternatingSearcher;
-import ImageGeneration.Searchers.BfSearcher;
 import ImageGeneration.Searchers.Searcher;
 import ImageGeneration.Searchers.SearcherFactory;
-import ImageGeneration.Searchers.SearcherFactory.Type;
-import twitter4j.StatusUpdate;
-import twitter4j.TwitterException;
 
 public class App {
-    private static String inputPath = "./Temp/trendingImage.jpg";
+    private static String inputPath = "./Inputs/banner1.jpg";
     private static String outputPath = "./Outputs/";
     private static BufferedImage image;
+    private static int MAX_SEARCHERS = 6;
 
     public static void main(String[] args) {
         ImageAndStatus imageAndStatus = TwitterDriver.getTrendingImageAndStatus();
         loadImage(inputPath);
         BufferedImage transformedImage = randomImageTransformation(image);
         saveImage(transformedImage, outputPath, 0);
-        // TwitterDriver.postImage(image, imageAndStatus.getStatus());
+        TwitterDriver.postImage(image, imageAndStatus.getStatus());
+        TwitterDriver.postImageReply(image, imageAndStatus.getStatus());
     }
-
-    static void bfs(BufferedImage image) {
-        // set up frontier
-        UniqueDeque<Point> frontier = new UniqueDeque<>();
-        frontier.add(new Point(0, 0));
-        // set up heaps
-        PriorityQueue<Color> heap = new PriorityQueue<>(16, new ColorByDistance(Utils.randomColor()));
-        fillHeap(image, heap);
-        // set up neighbors
-        Point[] neighbors = NeighborBuilder.knight();
-        Utils.shuffleArray(neighbors);
-        // set up and run bfs
-        BfSearcher bfs = new BfSearcher(image, 
-            new HashSet<>(), 
-            frontier,
-            heap,
-            neighbors,
-            true
-        );
-        while (bfs.isDone() == false) {
-            bfs.step();
-        }
-    }
-
+    
     static void loadImage(String path) {
         try {
             image = ImageIO.read(new File(path));
@@ -117,25 +88,26 @@ public class App {
                 bestHeap.add(color);
             }
         }
-
-        for (PriorityQueue<Color> heap : heaps) {
-            System.out.println("Heap size: " + heap.size());
-        }
     }
 
     static BufferedImage randomImageTransformation(BufferedImage image) {
         // choose number of searchers
         Random random = new Random();
-        int numSearchers = 5; 
+        int numSearchers = random.nextInt(MAX_SEARCHERS) + 1;
+        System.out.println(numSearchers);
+
         // make a group of color providers
         List<PriorityQueue<Color>> colorProviders = Utils.getEmptyColorProviders(numSearchers);
         fillHeaps(image, colorProviders);
-        // make a list of possible neighbors
+
+        // make the neighbor factory and use it to get some possible neighbors
+        NeighborFactory neighborFactory = new NeighborFactory();
         List<Point[]> possibleNeighbors = new LinkedList<>();
-        possibleNeighbors.add(NeighborBuilder.carinal());
-        // possibleNeighbors.add(NeighborBuilder.knight());
-        possibleNeighbors.add(NeighborBuilder.circle(5));
-        // make the factory
+        for (int i = 0; i < numSearchers; i++) {
+            possibleNeighbors.add(neighborFactory.makeRandomNeighbors());
+        }
+
+        // make the searcher factory
         SearcherFactory searcherFactory = new SearcherFactory(
             image, 
             new HashSet<>(), 
@@ -143,23 +115,19 @@ public class App {
             possibleNeighbors, 
             true
         );
+
         // get searchers from the factory
         Searcher[] searchers = new Searcher[numSearchers];
-        Type[] types = Type.values();
         for (int i = 0; i < numSearchers; i++) {
-            Type type = types[random.nextInt(types.length)];
-            searchers[i] = searcherFactory.makeSearcher(type);
+            searchers[i] = searcherFactory.makeRandomSearcher();
         }
+
         // seed the searchers
         int imageWidth = image.getWidth();
         int imageHeight = image.getHeight();
         for (Searcher searcher : searchers) {
             Point point = new Point(random.nextInt(imageWidth), random.nextInt(imageHeight));
             searcher.seed(point);
-        }
-
-        for (Searcher searcher : searchers) {
-            System.out.println("Searcher is done: " + searcher.isDone());
         }
 
         // run until done
