@@ -95,7 +95,7 @@ public class TwitterDriver {
         catch (TwitterException exception) {
             exception.printStackTrace();
         }
-        System.out.println(trendName);
+        System.out.println("Trend: " + trendName);
         return trendName;
     }
 
@@ -105,11 +105,6 @@ public class TwitterDriver {
             try {
                 // make the status and add it to statuses
                 Status status = twitter.showStatus(id);
-                MediaEntity[] mediaEntities = status.getMediaEntities();
-                for (MediaEntity mediaEntity : mediaEntities) {
-                    System.out.println(mediaEntity.getType());
-                    System.out.println(mediaEntity.getMediaURL());
-                }
                 statuses.add(status);
             }
             catch (TwitterException exception) {
@@ -142,7 +137,18 @@ public class TwitterDriver {
     }
 
     private static StatusUpdate setupStatusUpdate(BufferedImage image, Status originalStatus) {
-        StatusUpdate statusUpdate = new StatusUpdate("Rearranged the pixels");
+        long id = originalStatus.getId();
+        StatusUpdate statusUpdate = new StatusUpdate("rearranged https://twitter.com/Interior/status/" + id);
+        // attach the image
+        statusUpdate.setMedia(getUploadableImage(image));
+        // mark explict if original status was explict
+        statusUpdate.setPossiblySensitive(originalStatus.isPossiblySensitive());
+        return statusUpdate;
+    }
+
+    private static StatusUpdate setupReply(BufferedImage image, Status originalStatus) {
+        String username = originalStatus.getUser().getScreenName();
+        StatusUpdate statusUpdate = new StatusUpdate("@" + username + " rearranged the pixels");
         // attach the image
         statusUpdate.setMedia(getUploadableImage(image));
         // mark explict if original status was explict
@@ -162,15 +168,11 @@ public class TwitterDriver {
         File output = null;
         try {
             ImageIO.write(image, "png", tempImg);
-            System.out.println("PNG size: " + Files.size(tempImg.toPath()));
             // if the png is less than max upload return that
             if (Files.size(tempImg.toPath()) < MAX_UPLOAD_SIZE) {
-                System.out.println("Setting output to png");
                 output = tempImg;
             }
-            // else resize
             else {
-                System.out.println("Resizing image ");
                 output = resizeImage(image);
             }
         } 
@@ -213,9 +215,10 @@ public class TwitterDriver {
     }
 
     public static void postImageReply(BufferedImage image, Status originalStatus) {
-        StatusUpdate statusUpdate = setupStatusUpdate(image, originalStatus);
+        StatusUpdate statusUpdate = setupReply(image, originalStatus);
         // Set update as a reply to the original status
-        statusUpdate.setInReplyToStatusId(originalStatus.getId());
+        // statusUpdate.setInReplyToStatusId(1337965556993982465L);
+        statusUpdate = statusUpdate.inReplyToStatusId(originalStatus.getId());
         // Post it
         try {
             twitter.updateStatus(statusUpdate);
