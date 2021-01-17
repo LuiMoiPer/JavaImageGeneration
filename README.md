@@ -1,5 +1,6 @@
 # JavaImageGeneration
-Making (hopefully) interesting images with java
+Making (hopefully) interesting images with java.\
+[Code in action](https://twitter.com/bot_transformer)
 
 ## Description
 This project downloads a trending image from Twitter, transforms it, and post the transformed image to twitter.
