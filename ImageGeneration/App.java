@@ -25,7 +25,7 @@ public class App {
 
     public static void main(String[] args) {
         ImageAndStatus imageAndStatus = TwitterDriver.getTrendingImageAndStatus();
-        loadImage(inputPath);
+        image = imageAndStatus.getImage();
         BufferedImage transformedImage = randomImageTransformation(image);
         saveImage(transformedImage, outputPath, 0);
         TwitterDriver.postImage(image, imageAndStatus.getStatus());
@@ -94,7 +94,6 @@ public class App {
         // choose number of searchers
         Random random = new Random();
         int numSearchers = random.nextInt(MAX_SEARCHERS) + 1;
-        System.out.println(numSearchers);
 
         // make a group of color providers
         List<PriorityQueue<Color>> colorProviders = Utils.getEmptyColorProviders(numSearchers);
