@@ -1,4 +1,4 @@
-package ImageGeneration;
+package ImageGeneration.Neighbors;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import ImageGeneration.Point;
+import ImageGeneration.Utils;
 
 /**
  * Used to help build a set of neighbors for search algorithims

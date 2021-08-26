@@ -1,6 +1,8 @@
-package ImageGeneration;
+package ImageGeneration.Neighbors;
 
 import java.util.Random;
+
+import ImageGeneration.Point;
 
 public class NeighborFactory {
 
