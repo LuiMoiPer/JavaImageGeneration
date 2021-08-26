@@ -14,6 +14,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import ImageGeneration.Neighbors.NeighborFactory;
 import ImageGeneration.Searchers.Searcher;
 import ImageGeneration.Searchers.SearcherFactory;
 
