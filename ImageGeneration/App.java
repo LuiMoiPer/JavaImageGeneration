@@ -24,7 +24,7 @@ public class App {
     private static String inputPath = "./Inputs/banner1.jpg";
     private static String outputPath = "./Outputs/";
     private static BufferedImage image;
-    private static int MAX_SEARCHERS = 6;
+    private static int MAX_SEARCHERS = 3;
 
     public static void main(String[] args) {
         ImageAndStatus imageAndStatus = TwitterDriver.getTrendingImageAndStatus();
