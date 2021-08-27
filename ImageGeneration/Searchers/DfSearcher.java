@@ -7,6 +7,7 @@ import java.util.Set;
 
 import ImageGeneration.Point;
 import ImageGeneration.UniqueDeque;
+import ImageGeneration.Neighbors.Providers.NeighborProvider;
 
 public class DfSearcher extends Searcher {
     public DfSearcher(
@@ -14,10 +15,10 @@ public class DfSearcher extends Searcher {
         Set<Point> visited,
         UniqueDeque<Point> frontier,
         PriorityQueue<Color> colorProvider,
-        Point[] neighbors,
+        NeighborProvider neighborProvider,
         boolean shuffleNeighbors
     ) {
-        super(image, visited, frontier, colorProvider, neighbors, shuffleNeighbors);
+        super(image, visited, frontier, colorProvider, neighborProvider, shuffleNeighbors);
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import ImageGeneration.Point;
 import ImageGeneration.UniqueDeque;
+import ImageGeneration.Neighbors.Providers.NeighborProvider;
 
 public class SearcherFactory {
     
@@ -27,27 +28,27 @@ public class SearcherFactory {
     private Set<Point> visited;
     private List<PriorityQueue<Color>> colorProviders;
     private int currColorProvider = 0;
-    private List<Point[]> possibleNeighbors;
+    private List<NeighborProvider> possibleNeighborProviders;
     private boolean shuffleNeighbors;
     
     public SearcherFactory (
         BufferedImage image,
         Set<Point> visited,
         List<PriorityQueue<Color>> colorProviders,
-        List<Point[]> possibleNeighbors,
+        List<NeighborProvider> possibleNeighborProviders,
         boolean shuffleNeighbors
     ) {
         if (colorProviders.size() < 1) {
             throw new IllegalArgumentException("There must be at least one color provider");
         }
-        if (possibleNeighbors.size() < 1) {
+        if (possibleNeighborProviders.size() < 1) {
             throw new IllegalArgumentException("There must be at least one set of neighbors");
         }
 
         this.image = image;
         this.visited = visited;
         this.colorProviders = colorProviders;
-        this.possibleNeighbors = possibleNeighbors;
+        this.possibleNeighborProviders = possibleNeighborProviders;
         this.shuffleNeighbors = shuffleNeighbors;
     }
 
@@ -84,8 +85,8 @@ public class SearcherFactory {
         return makeAlternatingSearcher(alternationPeriod, alternationPeriod);
     }
 
-    public AlternatingSearcher makeAlternatingSearcher(int alternationPeriod, Point[] neighbors) {
-        return makeAlternatingSearcher(alternationPeriod, alternationPeriod, neighbors);
+    public AlternatingSearcher makeAlternatingSearcher(int alternationPeriod, NeighborProvider neighborProvider) {
+        return makeAlternatingSearcher(alternationPeriod, alternationPeriod, neighborProvider);
     }
 
     public AlternatingSearcher makeAlternatingSearcher(int bfsSteps, int dfsSteps) {
@@ -101,13 +102,13 @@ public class SearcherFactory {
         );
     }
 
-    public AlternatingSearcher makeAlternatingSearcher(int bfsSteps, int dfsSteps, Point[] neighbors) {
+    public AlternatingSearcher makeAlternatingSearcher(int bfsSteps, int dfsSteps, NeighborProvider neighborProvider) {
         return new AlternatingSearcher(
             image, 
             visited, 
             new UniqueDeque<>(), 
             getColorProvider(), 
-            neighbors, 
+            neighborProvider, 
             shuffleNeighbors, 
             bfsSteps, 
             dfsSteps
@@ -125,13 +126,13 @@ public class SearcherFactory {
         );
     }
 
-    public BfSearcher makeBfSearcher(Point[] neighbors) {
+    public BfSearcher makeBfSearcher(NeighborProvider neighborProvider) {
         return new BfSearcher(
             image, 
             visited, 
             new UniqueDeque<>(), 
             getColorProvider(), 
-            neighbors, 
+            neighborProvider, 
             shuffleNeighbors
         );
     }
@@ -147,13 +148,13 @@ public class SearcherFactory {
         );
     }
 
-    public DfSearcher makeDfSearcher(Point[] neighbors) {
+    public DfSearcher makeDfSearcher(NeighborProvider neighborProvider) {
         return new DfSearcher(
             image, 
             visited, 
             new UniqueDeque<>(), 
             getColorProvider(), 
-            neighbors, 
+            neighborProvider, 
             shuffleNeighbors
         );
     }
@@ -166,8 +167,8 @@ public class SearcherFactory {
         return colorProvider;
     }
 
-    private Point[] getNeighbors() {
+    private NeighborProvider getNeighbors() {
         Random random = new Random();
-        return possibleNeighbors.get(random.nextInt(possibleNeighbors.size()));
+        return possibleNeighborProviders.get(random.nextInt(possibleNeighborProviders.size()));
     }
 }
