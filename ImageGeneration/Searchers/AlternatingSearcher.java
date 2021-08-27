@@ -7,6 +7,7 @@ import java.util.Set;
 
 import ImageGeneration.Point;
 import ImageGeneration.UniqueDeque;
+import ImageGeneration.Neighbors.Providers.NeighborProvider;;
 
 public class AlternatingSearcher extends Searcher {
 
@@ -20,12 +21,12 @@ public class AlternatingSearcher extends Searcher {
         Set<Point> visited,
         UniqueDeque<Point> frontier,
         PriorityQueue<Color> colorProvider,
-        Point[] neighbors,
+        NeighborProvider neighborProvider,
         boolean shuffleNeighbors,
         int bfsSteps,
         int dfsSteps
     ) {
-        super(image, visited, frontier, colorProvider, neighbors, shuffleNeighbors);
+        super(image, visited, frontier, colorProvider, neighborProvider, shuffleNeighbors);
         this.bfsSteps = bfsSteps;
         this.dfsSteps = dfsSteps;
         this.bfs = true;
@@ -37,11 +38,11 @@ public class AlternatingSearcher extends Searcher {
         Set<Point> visited,
         UniqueDeque<Point> frontier,
         PriorityQueue<Color> colorProvider,
-        Point[] neighbors,
+        NeighborProvider neighborProvider,
         boolean shuffleNeighbors,
         int steps
     ) {
-        this(image, visited, frontier, colorProvider, neighbors, shuffleNeighbors, steps, steps);
+        this(image, visited, frontier, colorProvider, neighborProvider, shuffleNeighbors, steps, steps);
     }
 
     @Override

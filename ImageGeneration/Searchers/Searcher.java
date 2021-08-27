@@ -8,15 +8,15 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import ImageGeneration.App;
 import ImageGeneration.Point;
 import ImageGeneration.UniqueDeque;
 import ImageGeneration.Utils;
+import ImageGeneration.Neighbors.Providers.NeighborProvider;
 
 public abstract class Searcher {
     private BufferedImage image;
     private Set<Point> visited;
-    private Point[] neighbors;
+    private NeighborProvider neighborProvider;
     private boolean shuffleNeighbors;
     protected PriorityQueue<Color> colorProvider;
     protected UniqueDeque<Point> frontier;
@@ -26,7 +26,7 @@ public abstract class Searcher {
         this.visited = null;
         this.frontier = null;
         this.colorProvider = null;
-        this.neighbors = null;
+        this.neighborProvider = null;
         this.shuffleNeighbors = true;
     }
 
@@ -35,14 +35,14 @@ public abstract class Searcher {
         Set<Point> visited,
         UniqueDeque<Point> frontier,
         PriorityQueue<Color> colorProvider,
-        Point[] neighbors,
+        NeighborProvider neighborProvider,
         boolean shuffleNeighbors
     ) {
         this.image = image;
         this.visited = visited;
         this.frontier = frontier;
         this.colorProvider = colorProvider;
-        this.neighbors = neighbors;
+        this.neighborProvider = neighborProvider;
         this.shuffleNeighbors = shuffleNeighbors;
     }
 
@@ -61,6 +61,8 @@ public abstract class Searcher {
     }
 
     protected void expandFrontier(Point point) {
+        Point[] neighbors = neighborProvider.getNeighbors();
+
         if (shuffleNeighbors) {
             Utils.shuffleArray(neighbors);
         }
