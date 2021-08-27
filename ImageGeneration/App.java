@@ -15,6 +15,8 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import ImageGeneration.Neighbors.NeighborFactory;
+import ImageGeneration.Neighbors.Providers.NeighborProvider;
+import ImageGeneration.Neighbors.Providers.NeighborProviderFactory;
 import ImageGeneration.Searchers.Searcher;
 import ImageGeneration.Searchers.SearcherFactory;
 
@@ -100,11 +102,11 @@ public class App {
         List<PriorityQueue<Color>> colorProviders = Utils.getEmptyColorProviders(numSearchers);
         fillHeaps(image, colorProviders);
 
-        // make the neighbor factory and use it to get some possible neighbors
-        NeighborFactory neighborFactory = new NeighborFactory();
-        List<Point[]> possibleNeighbors = new LinkedList<>();
+        // make the neighbor provider factory and use it to get some possible neighbor providers
+        NeighborProviderFactory neighborProviderFactory = new NeighborProviderFactory(new NeighborFactory());
+        List<NeighborProvider> possibleNeighborProviders = new LinkedList<>();
         for (int i = 0; i < numSearchers; i++) {
-            possibleNeighbors.add(neighborFactory.makeRandomNeighbors());
+            possibleNeighborProviders.add(neighborProviderFactory.makeRandomNeighborProvider());
         }
 
         // make the searcher factory
@@ -112,7 +114,7 @@ public class App {
             image, 
             new HashSet<>(), 
             colorProviders, 
-            possibleNeighbors, 
+            possibleNeighborProviders, 
             true
         );
 
