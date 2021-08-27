@@ -16,9 +16,11 @@ public class AlternatingNeighborProvider implements NeighborProvider{
     @Override
     public Point[] getNeighbors() {
         if (inital) {
+            inital = !inital;
             return initialNeighbors;
         }
         else {
+            inital = !inital;
             return alternateNeighbors;
         }
     }
