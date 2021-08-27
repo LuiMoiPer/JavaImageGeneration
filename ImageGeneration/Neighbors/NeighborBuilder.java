@@ -70,7 +70,7 @@ public class NeighborBuilder {
     }
 
     /* static stuff */
-    public static Point[] carinal() {
+    public static Point[] cardinal() {
         return new Point[] {
             new Point(1, 0),
             new Point(-1, 0),

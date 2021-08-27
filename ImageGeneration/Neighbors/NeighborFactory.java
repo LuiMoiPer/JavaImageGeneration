@@ -143,7 +143,7 @@ public class NeighborFactory {
     }
 
     public Point[] makeGapped() {
-        Point[] neighbors = NeighborBuilder.carinal();
+        Point[] neighbors = NeighborBuilder.cardinal();
         Random random = new Random();
         int gapSize = random.nextInt(MAX_GAP_SIZE - MIN_GAP_SIZE) + MIN_GAP_SIZE;
         return makeGapped(neighbors, gapSize);
@@ -188,9 +188,9 @@ public class NeighborFactory {
     }
 
     public Point[] makeCardinal(int scale) {
-        NeighborBuilder neighborBuilder = new NeighborBuilder(NeighborBuilder.carinal());
+        NeighborBuilder neighborBuilder = new NeighborBuilder(NeighborBuilder.cardinal());
         for (int i = 2; i <= scale; i++) {
-            neighborBuilder.addAll(NeighborBuilder.scale(NeighborBuilder.carinal(), i));
+            neighborBuilder.addAll(NeighborBuilder.scale(NeighborBuilder.cardinal(), i));
         }
         return neighborBuilder.getPoints();
     }
