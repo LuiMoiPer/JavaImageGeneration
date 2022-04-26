@@ -5,7 +5,7 @@ import java.awt.Color;
 public class FixedColor extends ColorProvider {
     Color color;
 
-    FixedColor(Color color) {
+    public FixedColor(Color color) {
         this.color = color;
     }
 

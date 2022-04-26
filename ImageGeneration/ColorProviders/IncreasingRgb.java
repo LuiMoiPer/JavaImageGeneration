@@ -5,15 +5,15 @@ import java.awt.Color;
 public class IncreasingRgb extends ColorProvider {
     int currentColor;
 
-    IncreasingRgb() {
+    public IncreasingRgb() {
         this.currentColor = 0;
     }
 
-    IncreasingRgb(int startColor) {
+    public IncreasingRgb(int startColor) {
         this.currentColor = startColor;
     }
 
-    IncreasingRgb(Color startColor) {
+    public IncreasingRgb(Color startColor) {
         this.currentColor = startColor.getRGB();
     }
 
