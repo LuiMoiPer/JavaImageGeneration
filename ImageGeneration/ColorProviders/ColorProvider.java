@@ -1,4 +1,4 @@
-package ImageGeneration;
+package ImageGeneration.ColorProviders;
 
 import java.awt.Color;
 
