@@ -1,9 +1,14 @@
-package ImageGeneration;
+package ImageGeneration.PixelPlacers;
 
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 
+import ImageGeneration.ColorProvider;
+import ImageGeneration.Pixel;
+import ImageGeneration.Point;
+import ImageGeneration.UniqueDeque;
+import ImageGeneration.Utils;
 import ImageGeneration.Neighbors.Providers.NeighborProvider;
 
 public abstract class PixelPlacer {
@@ -45,7 +50,7 @@ public abstract class PixelPlacer {
             if (visited.contains(point) == false) {
                 visited.add(point);
                 expandFrontier(point);
-                return new Pixel(point, nextColor());
+                return new Pixel(point, colorProvider.nextColor());
             }
         }
         return null;
@@ -79,6 +84,5 @@ public abstract class PixelPlacer {
 
     public abstract void seed(Point point);
     protected abstract Point nextPoint();
-    protected abstract Color nextColor();
     protected abstract void addToFrontier(Point point);
 }
