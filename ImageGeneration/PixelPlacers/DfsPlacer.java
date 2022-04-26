@@ -1,7 +1,7 @@
 package ImageGeneration.PixelPlacers;
 
-import ImageGeneration.ColorProvider;
 import ImageGeneration.Point;
+import ImageGeneration.ColorProviders.ColorProvider;
 import ImageGeneration.Neighbors.Providers.NeighborProvider;
 
 public class DfsPlacer extends PixelPlacer {

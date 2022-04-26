@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 
-import ImageGeneration.ColorProvider;
 import ImageGeneration.Pixel;
 import ImageGeneration.Point;
 import ImageGeneration.UniqueDeque;
 import ImageGeneration.Utils;
+import ImageGeneration.ColorProviders.ColorProvider;
 import ImageGeneration.Neighbors.Providers.NeighborProvider;
 
 public abstract class PixelPlacer {
