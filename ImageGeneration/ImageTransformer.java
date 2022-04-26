@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
 
+import ImageGeneration.PixelPlacers.PixelPlacer;
+
 public class ImageTransformer {
     BufferedImage image;
     Set<Point> visited;
